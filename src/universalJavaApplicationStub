@@ -321,7 +321,10 @@ elif [ ! -z ${JVMVersion} ] ; then
 	
 	else
 		# display error message with applescript
-		osascript -e "tell application \"System Events\" to display dialog \"ERROR launching '${CFBundleName}'\n\nNo suitable Java version found on your system!\nThis program requires Java ${JVMVersion}\nMake sure you install the required Java version.\" with title \"${CFBundleName}\" buttons {\" OK \"} default button 1 with icon path to resource \"${CFBundleIconFile}\" in bundle (path to me)"
+		osascript -e "tell application \"System Events\" to display dialog \"Un moteur d’exécution Java ${JVMVersion} est nécessaire pour ouvrir « ${CFBundleName} ». Souhaitez-vous vous rendre sur http://java.com pour en installer un ?\" with title \"${CFBundleName}\" buttons {\"Pas maintenant\", \"Installer\"} default button \"Installer\" with icon path to resource \"${CFBundleIconFile}\" in bundle (path to me)
+set response to button returned of the result
+if response is \"Installer\" then open location \"http://java.com\""
+
 		# exit with error
 		exit 3
 	fi
@@ -352,7 +355,7 @@ fi
 # display error message if MainClassName is empty
 if [ -z ${JVMMainClass} ]; then
 	# display error message with applescript
-	osascript -e "tell application \"System Events\" to display dialog \"ERROR launching '${CFBundleName}'!\n\n'MainClass' isn't specified!\nJava application cannot be started!\" with title \"${CFBundleName}\" buttons {\" OK \"} default button 1 with icon path to resource \"${CFBundleIconFile}\" in bundle (path to me)"
+	osascript -e "tell application \"System Events\" to display dialog \"ERREUR d'exécution de ${CFBundleName}.\n\n'MainClass' n'est pas spécifié.\nL'application Java ne peut pas être lancée.\" with title \"${CFBundleName}\" buttons {\" OK \"} default button 1 with icon path to resource \"${CFBundleIconFile}\" in bundle (path to me)"
 	# exit with error
 	exit 2
 
@@ -388,9 +391,9 @@ elif [ -f "$JAVACMD" ] && [ -x "$JAVACMD" ] ; then
 else
 
 	# display error message with applescript
-	osascript -e "tell application \"System Events\" to display dialog \"ERROR launching '${CFBundleName}'!\n\nYou need to have JAVA installed on your Mac!\nVisit http://java.com for more information...\" with title \"${CFBundleName}\" buttons {\"Later\", \"Install now\"} default button \"Install now\" with icon path to resource \"${CFBundleIconFile}\" in bundle (path to me)
+	osascript -e "tell application \"System Events\" to display dialog \"Un moteur d’exécution Java est nécessaire pour ouvrir « ${CFBundleName} ». Souhaitez-vous vous rendre sur http://java.com pour en installer un ?\" with title \"${CFBundleName}\" buttons {\"Pas maintenant\", \"Installer\"} default button \"Installer\" with icon path to resource \"${CFBundleIconFile}\" in bundle (path to me)
 set response to button returned of the result
-if response is \"Install now\" then open location \"http://java.com\""
+if response is \"Installer\" then open location \"http://java.com\""
 
 	# exit with error
 	exit 1
